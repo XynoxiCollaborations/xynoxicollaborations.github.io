@@ -1,0 +1,11 @@
+---
+import { existsSync } from 'node:fs';
+import { sitePath } from '../lib/paths';
+interface Props { title: string; filename: 'poster.pdf' | 'skript.pdf'; description: string }
+const { title, filename, description } = Astro.props;
+const available = existsSync(new URL(`../../public/downloads/${filename}`, import.meta.url));
+---
+<article class="card">
+  <h3>{title}</h3><p>{description}</p>
+  {available ? <a href={sitePath(`downloads/${filename}`)} download>{title} herunterladen (PDF)</a> : <p class="muted">Noch nicht verfügbar</p>}
+</article>

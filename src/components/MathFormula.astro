@@ -1,0 +1,9 @@
+---
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
+interface Props { tex: string; display?: boolean }
+const { tex, display = true } = Astro.props;
+const html = katex.renderToString(tex, { displayMode: display, throwOnError: true, output: 'htmlAndMathml' });
+---
+<div class="formula" set:html={html} />
+<style>.formula { overflow-x: auto; padding-block: .5rem; }</style>

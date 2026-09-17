@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DownloadCard from '../components/DownloadCard.astro';
+import { sitePath } from '../lib/paths';
+---
+<BaseLayout title="Approximation von Differentialgleichungen">
+  <p class="eyebrow">Mathematik · verstehen und ausprobieren</p>
+  <h1>Approximation von Differentialgleichungen</h1>
+  <p class="intro">Wie lässt sich eine Bewegung berechnen, wenn wir nur ihre Änderung kennen?
+    Numerische Verfahren nähern Lösungen Schritt für Schritt an.</p>
+  <p>Diese Website begleitet ein schulisches Mathematikprojekt. Am harmonischen Oszillator
+    untersuchen wir, wie sich Schrittweite und Rechenverfahren auf die Genauigkeit auswirken.</p>
+  <div class="cards">
+    <article class="card"><h2>Theorie</h2><p>Von einer Gleichung zweiter Ordnung zu einem System erster Ordnung.</p><a href={sitePath('theorie/')}>Grundlagen lesen →</a></article>
+    <article class="card"><h2>Simulationen</h2><p>Fünf Verfahren mit der exakten Lösung vergleichen.</p><a href={sitePath('simulationen/')}>Oszillator untersuchen →</a></article>
+  </div>
+  <section id="downloads"><h2>Downloads</h2><p>Hier erscheinen das wissenschaftliche Poster und das begleitende Skript.</p>
+    <div class="cards"><DownloadCard title="Poster" filename="poster.pdf" description="Das Projekt im Überblick." />
+      <DownloadCard title="Skript" filename="skript.pdf" description="Herleitungen und Erläuterungen zum Nachlesen." /></div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,16 @@
+---
+import { sitePath } from '../lib/paths';
+---
+<header class="site-header">
+  <a class="brand" href={sitePath()}>SimpleMath</a>
+  <nav aria-label="Hauptnavigation">
+    <a href={sitePath('theorie/')}>Theorie</a>
+    <a href={sitePath('simulationen/')}>Simulationen</a>
+    <a href={sitePath('#downloads')}>Downloads</a>
+  </nav>
+</header>
+<style>
+  .site-header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding-block: 1.5rem; border-bottom: 1px solid var(--border); }
+  .brand { font-weight: 750; text-decoration: none; }
+  nav { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+</style>
