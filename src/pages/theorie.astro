@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MathFormula from '../components/MathFormula.astro';
+---
+<BaseLayout title="Theorie">
+  <p class="eyebrow">Grundlagen</p><h1>Der harmonische Oszillator</h1>
+  <p>Eine Masse an einer idealen Feder schwingt ohne Reibung. Die Rückstellkraft ist
+    proportional zur Auslenkung und wirkt ihr entgegen.</p>
+  <MathFormula tex={String.raw`\ddot{x}(t) = -\frac{D}{m}x(t)`} />
+  <p>Dabei ist x die Auslenkung, D die Federkonstante und m die Masse. Zwei Punkte
+    über x bezeichnen die zweite Ableitung nach der Zeit: die Beschleunigung.</p>
+  <h2>Ein System erster Ordnung</h2>
+  <p>Wir führen die Geschwindigkeit v als zusätzliche Variable ein:</p>
+  <MathFormula tex={String.raw`\dot{x}(t)=v(t)`} />
+  <MathFormula tex={String.raw`\dot{v}(t)=-\frac{D}{m}x(t)`} />
+  <p>Aus Anfangsposition und Anfangsgeschwindigkeit berechnen numerische Verfahren
+    neue Zustände in Zeitschritten h. Kleinere Schritte verbessern häufig die Genauigkeit,
+    benötigen aber mehr Rechenarbeit.</p>
+  <h2>Eine exakte Vergleichslösung</h2>
+  <MathFormula tex={String.raw`x(t)=x_0\cos(\omega t)+\frac{v_0}{\omega}\sin(\omega t),\qquad \omega=\sqrt{\frac{D}{m}}`} />
+  <p>Diese Formel gilt für Anfangswerte bei t = 0 und positive Werte von D und m.
+    Sie dient als Referenz für den absoluten Positionsfehler der Simulation.</p>
+</BaseLayout>

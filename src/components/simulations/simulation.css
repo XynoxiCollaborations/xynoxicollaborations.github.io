@@ -1,0 +1,8 @@
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--space); }
+.controls label { display: grid; gap: .4rem; }
+.controls input, .controls select { width: 100%; padding: .65rem; border: 1px solid var(--border); border-radius: .3rem; background: white; color: var(--text); font: inherit; }
+.controls button { align-self: end; }
+.plot { min-height: 360px; width: 100%; margin-block: var(--space); }
+.table-scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: .5rem; text-align: right; border-bottom: 1px solid var(--border); }
