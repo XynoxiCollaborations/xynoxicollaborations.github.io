@@ -5,7 +5,13 @@ import { Icon } from "astro-icon/components";
 <footer>
   <p>
     <span>SimpleMath</span><span aria-hidden="true">·</span>
-    <span class="credit"><Icon name="code" aria-label="Code" role="img" /> mit <Icon name="codex" aria-label="Codex" role="img" /></span>
+    <span class="credit"
+      ><Icon name="code" aria-label="Code" role="img" /> with <Icon
+        name="codex"
+        aria-label="Codex"
+        role="img"
+      /></span
+    >
   </p>
   <style>
     footer {
@@ -14,8 +20,21 @@ import { Icon } from "astro-icon/components";
       border-top: 1px solid var(--border);
       color: var(--muted);
     }
-    p, .credit { display: flex; align-items: center; flex-wrap: wrap; gap: .55rem; }
-    p { font-size: .85rem; }
-    .credit :global(svg) { display: block; width: 1.15rem; height: 1.15rem; flex: none; }
+    p,
+    .credit {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+    p {
+      font-size: 0.85rem;
+    }
+    .credit :global(svg) {
+      display: block;
+      width: 1.15rem;
+      height: 1.15rem;
+      flex: none;
+    }
   </style>
 </footer>
