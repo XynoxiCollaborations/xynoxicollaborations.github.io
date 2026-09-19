@@ -1,32 +1,60 @@
 import { useEffect, useRef, useState } from 'react';
-import type { Data } from 'plotly.js';
+import type { LineTrace } from '../../visualization/traces';
+import { themedPlot } from '../../visualization/plotTheme';
 
-export default function Plot({ traces, title, yLabel }: { traces: Data[]; title: string; yLabel: string }) {
+export default function Plot({ traces, title, yLabel }: { traces: LineTrace[]; title: string; yLabel: string }) {
   const element = useRef<HTMLDivElement>(null);
+  const queue = useRef<Promise<void>>(Promise.resolve());
+  const revision = useRef(0);
   const [error, setError] = useState(false);
+
   useEffect(() => {
     const target = element.current;
     if (!target) return;
-    let cancelled = false;
+    let disposed = false;
     let observer: ResizeObserver | undefined;
-    let cleanup: (() => void) | undefined;
-    setError(false);
-    // Plotly touches browser globals, so import only after the island mounts.
-    void import('plotly.js-basic-dist-min').then(async Plotly => {
-      if (cancelled) return;
-      cleanup = () => Plotly.purge(target);
-      await Plotly.react(target, traces, {
-        title: { text: title }, autosize: true, height: 360,
-        margin: { l: 65, r: 20, b: 90, t: 55 },
-        xaxis: { title: { text: 'Zeit t (s)' } }, yaxis: { title: { text: yLabel } },
-        legend: { orientation: 'h', y: -0.2 }, font: { family: 'system-ui, sans-serif' },
-      }, { responsive: true, displaylogo: false, scrollZoom: false });
-      if (cancelled) { Plotly.purge(target); return; }
-      observer = new ResizeObserver(() => { void Plotly.Plots.resize(target); });
+    void import('plotly.js-basic-dist-min').then(Plotly => {
+      if (disposed) return;
+      observer = new ResizeObserver(() => {
+        void queue.current.then(() => { if (!disposed) return Plotly.Plots.resize(target); }).catch(() => {});
+      });
       observer.observe(target);
-    }).catch(() => { if (!cancelled) setError(true); });
-    return () => { cancelled = true; observer?.disconnect(); cleanup?.(); };
-  }, [traces, title, yLabel]);
-  return <>{error && <p role="alert">Das Diagramm konnte nicht geladen werden. Bitte Seite neu laden.</p>}
-    <div ref={element} className="plot" role="img" aria-label={`${title}. ${yLabel} über der Zeit.`} /></>;
+    }).catch(() => { if (!disposed) setError(true); });
+    return () => {
+      disposed = true;
+      revision.current++;
+      observer?.disconnect();
+      void queue.current.then(async () => {
+        const Plotly = await import('plotly.js-basic-dist-min');
+        Plotly.purge(target);
+      }).catch(() => {});
+    };
+  }, []);
+
+  useEffect(() => {
+    const target = element.current;
+    if (!target) return;
+    const current = ++revision.current;
+    // Serialize Plotly updates and skip outdated slider events. Never purge on updates.
+    queue.current = queue.current.catch(() => {}).then(async () => {
+      const Plotly = await import('plotly.js-basic-dist-min');
+      if (current !== revision.current) return;
+      const theme = themedPlot(target, traces);
+      await Plotly.react(target, theme.traces, {
+        ...theme.layout, autosize: true, height: 420,
+        margin: { l: 55, r: 16, b: 120, t: 24 },
+        yaxis: { ...theme.layout.yaxis, title: { text: yLabel } },
+        legend: { orientation: 'h', y: -0.28, x: 0, font: { size: 11 } },
+        hovermode: 'x', dragmode: 'zoom',
+      }, { responsive: true, displaylogo: false, scrollZoom: false, displayModeBar: false });
+      if (current === revision.current) setError(false);
+    }).catch(() => { if (current === revision.current) setError(true); });
+  }, [traces, yLabel]);
+
+  return <figure className="plot-card">
+    <figcaption>{title}</figcaption>
+    {error && <p role="alert">Das Diagramm konnte nicht geladen werden. Bitte Seite neu laden.</p>}
+    <div ref={element} className="plot" role="img" aria-label={`${title}. ${yLabel} über der Zeit. Werte in der nachfolgenden Tabelle.`} />
+    <p className="plot-hint">Ziehen zum Zoomen · Doppelklick zum Zurücksetzen</p>
+  </figure>;
 }

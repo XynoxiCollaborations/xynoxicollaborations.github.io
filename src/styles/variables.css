@@ -1,12 +1,24 @@
 :root {
-  --background: #f7f8f5;
-  --surface: #ffffff;
-  --text: #1c2c34;
-  --muted: #4e626c;
-  --accent: #165f77;
-  --secondary-accent: #9a4515;
-  --border: #b8c7cb;
-  --content-width: 1080px;
+  color-scheme: dark;
+  --background: #181b20;
+  --surface: #20252c;
+  --surface-raised: #292f38;
+  --text: #edf2f7;
+  --muted: #a6b3c2;
+  --primary: #69d2f5;
+  --accent: var(--primary);
+  --secondary-accent: #b5a2ff;
+  --on-primary: #102029;
+  --border: #39434f;
+  --plot-grid: #323b46;
+  --method-euler: #ffb86b;
+  --method-eulerCromer: #b5a2ff;
+  --method-heun: #80dec0;
+  --method-leapfrog: #ff91b4;
+  --method-rungeKutta4: var(--primary);
+  --exact: #edf2f7;
+  --content-width: 1160px;
   --space: 1.25rem;
-  --radius: .65rem;
+  --radius: .85rem;
+  --mono: ui-monospace, 'Cascadia Code', 'SFMono-Regular', Consolas, monospace;
 }

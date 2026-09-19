@@ -1,11 +1,54 @@
 ---
-import { existsSync } from 'node:fs';
+import { isPdfAvailable, type DownloadFilename } from '../lib/downloads';
 import { sitePath } from '../lib/paths';
-interface Props { title: string; filename: 'poster.pdf' | 'skript.pdf'; description: string }
-const { title, filename, description } = Astro.props;
-const available = existsSync(new URL(`../../public/downloads/${filename}`, import.meta.url));
+interface Props { title: string; description: string; variants: { filename: DownloadFilename; label: string }[] }
+const { title, description, variants } = Astro.props;
+const downloads = variants.map(variant => ({ ...variant, available: isPdfAvailable(variant.filename) }));
 ---
-<article class="card">
+<article class="card download-card">
+  <span class="file-type">PDF / {title === 'Poster' ? '02 VERSIONEN' : 'DOKUMENT'}</span>
   <h3>{title}</h3><p>{description}</p>
-  {available ? <a href={sitePath(`downloads/${filename}`)} download>{title} herunterladen (PDF)</a> : <p class="muted">Noch nicht verfügbar</p>}
+  {downloads.length > 1 ? <details class="download-menu">
+    <summary class="button">Download <span aria-hidden="true">⌄</span></summary>
+    <div class="download-options">
+      {downloads.map(file => file.available
+        ? <a href={sitePath(`downloads/${file.filename}`)} download>{file.label}<span aria-hidden="true">↓</span></a>
+        : <span class="unavailable">{file.label} · noch nicht verfügbar</span>)}
+    </div>
+  </details> : downloads.map(file => file.available
+    ? <a class="button" href={sitePath(`downloads/${file.filename}`)} download>{file.label} <span aria-hidden="true">↓</span></a>
+    : <p class="muted">Noch nicht verfügbar</p>)}
 </article>
+<style>
+  .download-card { display: flex; flex-direction: column; align-items: flex-start; }
+  .file-type { color: var(--primary); font: .7rem var(--mono); letter-spacing: .08em; margin-bottom: 1.2rem; }
+  .download-card p { margin-top: 0; margin-bottom: 1.5rem; }
+  .download-card > .button, .download-menu { margin-top: auto; }
+  .download-menu { width: 100%; }
+  summary { list-style: none; width: fit-content; }
+  summary::-webkit-details-marker { display: none; }
+  .download-options { margin-top: .5rem; padding: .4rem; border: 1px solid var(--border); border-radius: .5rem; background: var(--background); }
+  .download-options a, .unavailable { display: flex; justify-content: space-between; gap: .5rem; padding: .7rem; min-height: 44px; font-size: .85rem; text-decoration: none; border-radius: .3rem; }
+  .download-options a:hover { background: var(--surface-raised); color: var(--primary); }
+  .unavailable { color: var(--muted); }
+</style>
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('.download-menu').forEach(menu => {
+    // Native details supplies click, touch and keyboard support even without JS.
+    let pinned = false;
+    const summary = menu.querySelector('summary')!;
+    summary.addEventListener('click', event => {
+      event.preventDefault();
+      pinned = !pinned;
+      menu.open = pinned;
+    });
+    menu.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') menu.open = true; });
+    menu.addEventListener('pointerleave', () => { if (!pinned && !menu.contains(document.activeElement)) menu.open = false; });
+    menu.addEventListener('focusout', event => {
+      if (!pinned && !menu.contains(event.relatedTarget as Node | null)) menu.open = false;
+    });
+    menu.addEventListener('keydown', event => {
+      if (event.key === 'Escape') { pinned = false; menu.open = false; summary.focus(); }
+    });
+  });
+</script>

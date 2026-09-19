@@ -14,8 +14,10 @@ import { sitePath } from '../lib/paths';
     <article class="card"><h2>Theorie</h2><p>Von einer Gleichung zweiter Ordnung zu einem System erster Ordnung.</p><a href={sitePath('theorie/')}>Grundlagen lesen →</a></article>
     <article class="card"><h2>Simulationen</h2><p>Fünf Verfahren mit der exakten Lösung vergleichen.</p><a href={sitePath('simulationen/')}>Oszillator untersuchen →</a></article>
   </div>
-  <section id="downloads"><h2>Downloads</h2><p>Hier erscheinen das wissenschaftliche Poster und das begleitende Skript.</p>
-    <div class="cards"><DownloadCard title="Poster" filename="poster.pdf" description="Das Projekt im Überblick." />
-      <DownloadCard title="Skript" filename="skript.pdf" description="Herleitungen und Erläuterungen zum Nachlesen." /></div>
+  <section id="downloads"><h2>Material zum Projekt</h2><p>Poster und Skript zum Herunterladen. Aktuell enthalten die PDFs nur ihren Dateinamen als Funktionstest.</p>
+    <div class="cards"><DownloadCard title="Poster" description="Das Projekt im Überblick. Als Druckversion oder für den Bildschirm."
+      variants={[{ filename: 'poster_print.pdf', label: 'Druckversion herunterladen' }, { filename: 'poster_digital.pdf', label: 'Digitale Version herunterladen' }]} />
+      <DownloadCard title="Skript" description="Herleitungen und Erläuterungen zum Nachlesen."
+        variants={[{ filename: 'script.pdf', label: 'Skript herunterladen' }]} /></div>
   </section>
 </BaseLayout>

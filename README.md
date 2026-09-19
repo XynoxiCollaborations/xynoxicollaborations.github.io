@@ -17,6 +17,8 @@ und Build benötigt. TypeScript 6 ist die aktuelle von Astro Check unterstützte
 ```bash
 git clone https://github.com/XynoxiCollaborations/xynoxicollaborations.github.io.git
 cd xynoxicollaborations.github.io
+git lfs install
+git lfs pull
 npm ci
 npm run dev
 ```
@@ -70,9 +72,21 @@ Texte direkt in `src/pages/*.astro` ändern. Für weitere Formeln die Verwendung
 gebündelt; ungültige Formeln lassen den Build fehlschlagen. Farben, Abstände und
 Inhaltsbreite stehen in `src/styles/variables.css`.
 
-Die endgültigen PDFs als `public/downloads/poster.pdf` und `public/downloads/skript.pdf`
-ablegen und neu bauen. `DownloadCard.astro` prüft beim Build, ob sie existieren.
-Fehlende Dateien erhalten einen Hinweis ohne kaputten Link. Keine Platzhalter-PDFs.
+Die PDFs liegen in `public/downloads/`: `poster_print.pdf`, `poster_digital.pdf`
+und `script.pdf`. Aktuell enthalten sie zum Funktionstest nur ihren Dateinamen.
+Später durch die endgültigen Dokumente ersetzen und den Testhinweis auf der Startseite
+entfernen. Die Posterkarte öffnet per Klick, Tastatur oder Mauszeiger ein Menü;
+das Skript erhält einen direkten Downloadlink. Die Beschriftungen sind auf Deutsch.
+Fehlende Dateien erhalten einen Hinweis ohne kaputten Link. Der Build bricht bei
+einem LFS-Zeiger anstelle eines PDFs ab, damit keine defekten Downloads veröffentlicht werden.
+
+Der gesamte Downloadordner (auch Unterordner und README) wird über die Regel in
+`.gitattributes` mit Git LFS verwaltet. Git LFS muss lokal installiert sein.
+Nach dem Klonen `git lfs install` und `git lfs pull` ausführen; beim normalen
+`git add`, Commit und Push übernimmt LFS die Dokumente. Beide Workflows verwenden
+`lfs: true` beim Checkout und veröffentlichen die echten Dateien im statischen Build.
+Die bisherigen Dateien werden ohne Umschreiben der Git-Historie auf LFS umgestellt.
+Bei neuen Rechnern ist die lokale LFS-Einrichtung erneut erforderlich.
 
 ## Mathematik und Erweiterungen
 
@@ -92,17 +106,28 @@ sollte man keine globalen Energieeigenschaften einer konstanten Schrittweite vor
 
 Die erste Simulation setzt D = 1 N/m, m = 1 kg, t₀ = 0 und keine Reibung voraus.
 Verglichen wird der absolute **Positionsfehler an denselben Stützstellen**, nicht
-der Fehler des vollständigen Zustands. Plotly verbindet die Punkte linear. Ein
-Verfahren wird jeweils mit der exakten Lösung verglichen. Der Formularbutton
-aktualisiert die Berechnung. Instabilität wird nicht künstlich korrigiert.
+der Fehler des vollständigen Zustands. Plotly verbindet die Punkte linear.
+Die Regler steuern h (0.01–0.50 s) und N (10–1000 ganze Schritte); T = N · h.
+Diese Grenzen sind in `src/simulation/comparison.ts` anpassbar. Änderungen an
+Reglern, Methode und gültigen Anfangswerten werden sofort berechnet. „Alle Verfahren“
+zeichnet alle fünf Näherungen und ihre Fehler mit konsistenten Farben. Die Checkbox
+blendet ausschließlich die exakte Kurve aus; die Fehlerberechnung bleibt erhalten.
+Mit „exakt“ ist die analytische Lösung gemeint. Instabilität wird nicht künstlich korrigiert.
+Bei stark wachsendem Euler-Fehler kann die gemeinsame Achse die anderen Kurven
+zusammendrücken; dann ein einzelnes Verfahren auswählen oder hineinzoomen.
+
+Das Design ist Mobile First mit dunkelgrauem Hintergrund und Primärfarbe `#69d2f5`.
+Alle Oberflächen-, Text-, Akzent- und Verfahrensfarben stehen in
+`src/styles/variables.css`. Plotly liest dieselben Variablen beim Zeichnen.
 
 ### Ein weiteres Verfahren hinzufügen
 
 1. Eine reine TypeScript-Datei in `src/math/methods/` anlegen.
 2. Die passende allgemeine oder mechanische Schnittstelle verwenden; Voraussetzungen dokumentieren.
 3. Manuell überprüfbare Schritte und Genauigkeit in `tests/math/` testen.
-4. Name und Solver-Auswahl in `src/simulation/oscillator.ts` ergänzen. Das Formular
-   übernimmt die Auswahlbezeichnungen automatisch.
+4. Name und Solver-Auswahl in `src/simulation/oscillator.ts` ergänzen und eine
+   `--method-NAME`-Farbe in `variables.css` definieren. Formular und Vergleich
+   übernehmen das neue Verfahren automatisch.
 
 ### Ein weiteres Gleichungssystem hinzufügen
 

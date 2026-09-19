@@ -2,15 +2,20 @@
 import { sitePath } from '../lib/paths';
 ---
 <header class="site-header">
-  <a class="brand" href={sitePath()}>SimpleMath</a>
+  <a class="brand" href={sitePath()}><span aria-hidden="true" class="brand-mark">∂</span> SimpleMath<span class="brand-dot">.</span></a>
   <nav aria-label="Hauptnavigation">
-    <a href={sitePath('theorie/')}>Theorie</a>
-    <a href={sitePath('simulationen/')}>Simulationen</a>
+    <a href={sitePath('theorie/')} aria-current={Astro.url.pathname === sitePath('theorie/') ? 'page' : undefined}>Theorie</a>
+    <a href={sitePath('simulationen/')} aria-current={Astro.url.pathname === sitePath('simulationen/') ? 'page' : undefined}>Simulationen</a>
     <a href={sitePath('#downloads')}>Downloads</a>
   </nav>
 </header>
 <style>
-  .site-header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; padding-block: 1.5rem; border-bottom: 1px solid var(--border); }
-  .brand { font-weight: 750; text-decoration: none; }
-  nav { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+  .site-header { display: flex; flex-direction: column; gap: .75rem; padding-block: 1.25rem; border-bottom: 1px solid var(--border); }
+  .brand { display: inline-flex; align-items: center; align-self: start; font-size: 1.15rem; font-weight: 750; text-decoration: none; color: var(--text); }
+  .brand-mark { display: inline-grid; place-items: center; width: 2rem; height: 2rem; margin-right: .6rem; border: 1px solid var(--border); border-radius: .5rem; color: var(--primary); font-size: 1.5rem; }
+  .brand-dot { color: var(--primary); }
+  nav { display: flex; flex-wrap: wrap; gap: .3rem 1.25rem; }
+  nav a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font-size: .9rem; text-decoration: none; }
+  nav a:hover, nav a[aria-current] { color: var(--primary); }
+  @media (min-width: 640px) { .site-header { flex-direction: row; align-items: center; justify-content: space-between; } }
 </style>

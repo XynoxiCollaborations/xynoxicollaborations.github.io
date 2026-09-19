@@ -9,7 +9,7 @@ import { exactOscillator } from '../math/systems/exactSolutions';
 import type { Solution } from '../math/types';
 
 export const methodNames = { euler: 'Euler', eulerCromer: 'Euler-Cromer', heun: 'Heun',
-  rungeKutta4: 'Runge-Kutta 4', leapfrog: 'Leapfrog' } as const;
+  leapfrog: 'Leapfrog', rungeKutta4: 'Runge-Kutta-4' } as const;
 export type Method = keyof typeof methodNames;
 export interface SimulationParameters {
   method: Method; stepSize: number; duration: number; position: number; velocity: number;

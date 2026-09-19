@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import type { SimulationData } from '../../simulation/oscillator';
+import type { ComparisonData } from '../../simulation/comparison';
 import { errorTraces } from '../../visualization/traces';
 import Plot from './Plot';
-export default function ErrorPlot({ data }: { data: SimulationData }) {
+export default function ErrorPlot({ data }: { data: ComparisonData }) {
   const traces = useMemo(() => errorTraces(data), [data]);
-  return <Plot traces={traces} title="Absoluter Positionsfehler" yLabel="|x numerisch − x exakt| (m)" />;
+  return <Plot traces={traces} title="Absoluter Positionsfehler" yLabel="Positionsfehler (m)" />;
 }

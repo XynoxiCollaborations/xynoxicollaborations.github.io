@@ -1,6 +1,3 @@
-# Downloads
-
-Die endgültigen Dateien hier als `poster.pdf` und `skript.pdf` ablegen.
-Nach einem neuen Build erscheinen automatisch direkte Downloadlinks auf der
-Startseite. Fehlende Dateien werden als „Noch nicht verfügbar“ angezeigt.
-Keine leeren oder künstlichen PDF-Dateien anlegen.
+version https://git-lfs.github.com/spec/v1
+oid sha256:35d0ea2ba7880d97fb6a8d3a54f2c08f2ae8473e0b81f384ebdd136baeee2052
+size 886

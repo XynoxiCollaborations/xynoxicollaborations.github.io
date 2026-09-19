@@ -1,8 +1,37 @@
-.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space); border: 1px solid var(--border); border-radius: var(--radius); padding: var(--space); }
-.controls label { display: grid; gap: .4rem; }
-.controls input, .controls select { width: 100%; padding: .65rem; border: 1px solid var(--border); border-radius: .3rem; background: white; color: var(--text); font: inherit; }
-.controls button { align-self: end; }
-.plot { min-height: 360px; width: 100%; margin-block: var(--space); }
+.simulation { display: grid; gap: var(--space); margin-top: 2rem; align-items: start; }
+.controls { display: grid; gap: 1.5rem; min-width: 0; margin: 0; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; background: var(--surface); }
+.controls legend { padding-inline: .5rem; font: .8rem var(--mono); color: var(--primary); text-transform: uppercase; letter-spacing: .06em; }
+.control, .initial-values label { display: grid; gap: .6rem; min-width: 0; }
+.controls label { font-size: .85rem; color: var(--muted); }
+.control label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem .75rem; }
+.control output { color: var(--text); font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.controls input[type=number], .controls select { width: 100%; min-height: 44px; padding: .65rem; border: 1px solid var(--border); border-radius: .45rem; background: var(--background); color: var(--text); font: inherit; }
+.controls input[type=number]:invalid { border-color: var(--method-euler); }
+.controls input[type=range] { width: 100%; min-width: 0; margin: 0; height: 30px; accent-color: var(--primary); cursor: pointer; }
+.range-bounds { display: flex; justify-content: space-between; color: var(--muted); font: .7rem var(--mono); }
+.initial-values { display: grid; gap: 1rem; }
+.controls .exact-toggle { display: flex; gap: .7rem; align-items: center; min-height: 44px; color: var(--text); cursor: pointer; }
+.exact-toggle input { width: 1.1rem; height: 1.1rem; accent-color: var(--primary); flex: none; }
+.control-note { margin: 0; font-size: .75rem; }
+.simulation-results { min-width: 0; }
+.lab-heading { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: 1rem; font: .75rem var(--mono); color: var(--muted); }
+.live-indicator { display: inline-flex; align-items: center; gap: .4rem; color: var(--primary); }
+.live-indicator::before { content: ''; width: .4rem; height: .4rem; border-radius: 50%; background: currentColor; }
+.plot-card { min-width: 0; margin: 0 0 var(--space); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.plot-card figcaption { padding: 1rem 1.25rem 0; font-weight: 600; font-size: .95rem; }
+.plot { min-height: 420px; width: 100%; }
+.plot-hint { font-size: .7rem; margin: 0; padding: 0 1.25rem 1rem; }
 .table-scroll { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
-th, td { padding: .5rem; text-align: right; border-bottom: 1px solid var(--border); }
+table { border-collapse: collapse; width: 100%; font: .8rem/1.6 var(--mono); font-variant-numeric: tabular-nums; }
+caption { text-align: left; padding-block: .75rem; color: var(--muted); }
+th, td { padding: .6rem; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--muted); font-weight: 500; }
+.result-details { margin-top: 1rem; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius); }
+.result-details p { font-size: .8rem; }
+@media (min-width: 640px) { .initial-values { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) {
+  .simulation { grid-template-columns: 300px minmax(0, 1fr); gap: 1.5rem; }
+  .initial-values { grid-template-columns: 1fr; }
+  .controls { position: sticky; top: 1.5rem; }
+}
