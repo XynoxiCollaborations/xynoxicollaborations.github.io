@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
+import icon from "astro-icon";
 
 // CI supplies the actual Pages URL, including a configured custom domain.
 const pagesUrl = process.env.PAGES_URL;
@@ -9,5 +10,5 @@ export default defineConfig({
   site: url?.origin,
   base: url?.pathname || '/',
   trailingSlash: 'always',
-  integrations: [react()],
+  integrations: [react(), icon()],
 });
