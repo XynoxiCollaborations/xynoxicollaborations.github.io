@@ -7,6 +7,13 @@ export default function Plot({ traces, title, yLabel }: { traces: LineTrace[]; t
   const queue = useRef<Promise<void>>(Promise.resolve());
   const revision = useRef(0);
   const [error, setError] = useState(false);
+  const [themeVersion, setThemeVersion] = useState(0);
+
+  useEffect(() => {
+    const refresh = () => setThemeVersion(version => version + 1);
+    window.addEventListener('themechange', refresh);
+    return () => window.removeEventListener('themechange', refresh);
+  }, []);
 
   useEffect(() => {
     const target = element.current;
@@ -49,12 +56,12 @@ export default function Plot({ traces, title, yLabel }: { traces: LineTrace[]; t
       }, { responsive: true, displaylogo: false, scrollZoom: false, displayModeBar: false });
       if (current === revision.current) setError(false);
     }).catch(() => { if (current === revision.current) setError(true); });
-  }, [traces, yLabel]);
+  }, [traces, yLabel, themeVersion]);
 
   return <figure className="plot-card">
     <figcaption>{title}</figcaption>
     {error && <p role="alert">Das Diagramm konnte nicht geladen werden. Bitte Seite neu laden.</p>}
-    <div ref={element} className="plot" role="img" aria-label={`${title}. ${yLabel} über der Zeit. Werte in der nachfolgenden Tabelle.`} />
+    <div ref={element} className="plot" role="img" aria-label={`${title}. ${yLabel} über der Zeit.`} />
     <p className="plot-hint">Ziehen zum Zoomen · Doppelklick zum Zurücksetzen</p>
   </figure>;
 }

@@ -13,6 +13,11 @@
 .controls .exact-toggle { display: flex; gap: .7rem; align-items: center; min-height: 44px; color: var(--text); cursor: pointer; }
 .exact-toggle input { width: 1.1rem; height: 1.1rem; accent-color: var(--primary); flex: none; }
 .control-note { margin: 0; font-size: .75rem; }
+.method-options { border: 0; margin: 0; padding: 0; min-width: 0; }
+.controls .method-options legend { padding: 0 0 .5rem; color: var(--muted); font: inherit; text-transform: none; letter-spacing: normal; }
+.controls .method-option { display: flex; align-items: center; gap: .65rem; min-height: 36px; color: var(--text); cursor: pointer; }
+.method-option input { width: 1.1rem; height: 1.1rem; accent-color: var(--primary); }
+.method-swatch { width: .9rem; height: 3px; flex: none; }
 .simulation-results { min-width: 0; }
 .lab-heading { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: 1rem; font: .75rem var(--mono); color: var(--muted); }
 .live-indicator { display: inline-flex; align-items: center; gap: .4rem; color: var(--primary); }
@@ -33,5 +38,5 @@ th { color: var(--muted); font-weight: 500; }
 @media (min-width: 1000px) {
   .simulation { grid-template-columns: 300px minmax(0, 1fr); gap: 1.5rem; }
   .initial-values { grid-template-columns: 1fr; }
-  .controls { position: sticky; top: 1.5rem; }
+  /* The full set of controls can exceed the viewport height; keep it scrollable. */
 }

@@ -20,8 +20,10 @@ export default function Simulation() {
       {result.data && <>
         <div className="lab-heading"><span>Harmonischer Oszillator</span><span className="live-indicator">Live</span></div>
         <SolutionPlot data={result.data} showExact={showExact} />
-        <ErrorPlot data={result.data} />
-        <SimulationReadout data={result.data} />
+        {result.data.results.length > 0 ? <>
+          <ErrorPlot data={result.data} />
+          <SimulationReadout data={result.data} />
+        </> : <p role="status">Kein numerisches Verfahren ausgewählt. Wähle mindestens eines für den Fehlervergleich.</p>}
       </>}
     </div>
   </section>;

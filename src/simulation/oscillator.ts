@@ -13,17 +13,18 @@ export const methodNames = { euler: 'Euler', eulerCromer: 'Euler-Cromer', heun: 
 export type Method = keyof typeof methodNames;
 export interface SimulationParameters {
   method: Method; stepSize: number; duration: number; position: number; velocity: number;
+  springConstant: number; mass: number;
 }
 export interface SimulationData {
   numerical: Solution; exact: Solution; positionError: { t: number; error: number }[];
   maxPositionError: number;
 }
 export const defaultParameters: SimulationParameters = {
-  method: 'rungeKutta4', stepSize: 0.1, duration: 20, position: 1, velocity: 0,
+  method: 'rungeKutta4', stepSize: 0.1, duration: 20, position: 1, velocity: 0, springConstant: 1, mass: 1,
 };
 export function simulateOscillator(parameters: SimulationParameters): SimulationData {
-  const { method, stepSize, duration, position, velocity } = parameters;
-  const system = harmonicOscillator();
+  const { method, stepSize, duration, position, velocity, springConstant, mass } = parameters;
+  const system = harmonicOscillator(springConstant, mass);
   const initial = { position: [position], velocity: [velocity] };
   const options = { stepSize, duration };
   let numerical: Solution;
@@ -35,7 +36,7 @@ export function simulateOscillator(parameters: SimulationParameters): Simulation
       numerical = solver(asFirstOrder(system, 1), pack(initial), options);
     }
   }
-  const exact = numerical.map(({ t }) => ({ t, state: exactOscillator(t, position, velocity) }));
+  const exact = numerical.map(({ t }) => ({ t, state: exactOscillator(t, position, velocity, springConstant, mass) }));
   const positionError = numerical.map(({ t, state }, index) =>
     ({ t, error: Math.abs(state[0] - exact[index].state[0]) }));
   return { numerical, exact, positionError,

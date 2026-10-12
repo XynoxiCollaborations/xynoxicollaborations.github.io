@@ -1,6 +1,8 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ThemeInit from '../components/ThemeInit.astro';
+import { sitePath } from '../lib/paths';
 import '../styles/global.css';
 interface Props { title: string; description?: string }
 const { title, description = 'Ein Schulprojekt über numerische Verfahren für Differentialgleichungen.' } = Astro.props;
@@ -8,7 +10,10 @@ const { title, description = 'Ein Schulprojekt über numerische Verfahren für D
 <!doctype html>
 <html lang="de">
   <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} /><title>{title} | SimpleMath</title></head>
+    <meta name="description" content={description} /><title>{title === 'SimpleMath' ? title : `${title} | SimpleMath`}</title>
+    <link rel="icon" type="image/svg+xml" href={sitePath('favicon.svg')} />
+    <ThemeInit />
+  </head>
   <body><a class="skip-link" href="#inhalt">Zum Inhalt</a><div class="container">
     <Header /><main id="inhalt"><slot /></main><Footer />
   </div></body>

@@ -1,0 +1,33 @@
+<!-- Apply the saved preference before paint; no React or server runtime needed. -->
+<script is:inline>
+  (() => {
+    const key = 'simplemath-theme';
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    const normalize = value => ['light', 'dark', 'system'].includes(value) ? value : 'system';
+    let preference = 'system';
+    try { preference = normalize(localStorage.getItem(key)); } catch { /* Storage may be disabled. */ }
+    const apply = () => {
+      document.documentElement.dataset.theme = preference === 'system'
+        ? (media.matches ? 'dark' : 'light') : preference;
+      document.querySelectorAll('[data-theme-option]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.themeOption === preference));
+      });
+      window.dispatchEvent(new Event('themechange'));
+    };
+    apply();
+    media.addEventListener('change', () => { if (preference === 'system') apply(); });
+    window.addEventListener('storage', event => {
+      if (event.key === key || event.key === null) { preference = normalize(event.newValue); apply(); }
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      apply();
+      document.querySelectorAll('[data-theme-option]').forEach(button => {
+        button.addEventListener('click', () => {
+          preference = normalize(button.dataset.themeOption);
+          try { localStorage.setItem(key, preference); } catch { /* Still works for this page. */ }
+          apply();
+        });
+      });
+    }, { once: true });
+  })();
+</script>

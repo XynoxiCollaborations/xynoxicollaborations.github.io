@@ -22,3 +22,23 @@
   --radius: .85rem;
   --mono: ui-monospace, 'Cascadia Code', 'SFMono-Regular', Consolas, monospace;
 }
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --background: #f3f6f9;
+  --surface: #ffffff;
+  --surface-raised: #e8eef4;
+  --text: #182b3a;
+  --muted: #4e6272;
+  --primary: #09627e;
+  --secondary-accent: #6445ae;
+  --on-primary: #ffffff;
+  --border: #bccad6;
+  --plot-grid: #dce4eb;
+  --method-euler: #aa4b00;
+  --method-eulerCromer: #7650c1;
+  --method-heun: #08795a;
+  --method-leapfrog: #bc3865;
+  --method-rungeKutta4: var(--primary);
+  --exact: #182b3a;
+}

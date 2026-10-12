@@ -75,7 +75,7 @@ Inhaltsbreite stehen in `src/styles/variables.css`.
 Die PDFs liegen in `public/downloads/`: `poster_print.pdf`, `poster_digital.pdf`
 und `script.pdf`. Aktuell enthalten sie zum Funktionstest nur ihren Dateinamen.
 Später durch die endgültigen Dokumente ersetzen und den Testhinweis auf der Startseite
-entfernen. Die Posterkarte öffnet per Klick, Tastatur oder Mauszeiger ein Menü;
+entfernen. Die Posterkarte zeigt Print-Version und digitale Version direkt an;
 das Skript erhält einen direkten Downloadlink. Die Beschriftungen sind auf Deutsch.
 Fehlende Dateien erhalten einen Hinweis ohne kaputten Link. Der Build bricht bei
 einem LFS-Zeiger anstelle eines PDFs ab, damit keine defekten Downloads veröffentlicht werden.
@@ -104,13 +104,15 @@ wird bei Bedarf verkürzt. Maximal 100 000 Schritte sind erlaubt. Nichtendliche 
 und ungültige Dimensionen werden abgewiesen. Bei einem verkürzten letzten Schritt
 sollte man keine globalen Energieeigenschaften einer konstanten Schrittweite voraussetzen.
 
-Die erste Simulation setzt D = 1 N/m, m = 1 kg, t₀ = 0 und keine Reibung voraus.
+Die Simulation startet mit D = 1 N/m und m = 1 kg. Beide Werte sind positiv und
+frei einstellbar; t₀ = 0 und keine Reibung bleiben die Modellannahmen.
 Verglichen wird der absolute **Positionsfehler an denselben Stützstellen**, nicht
 der Fehler des vollständigen Zustands. Plotly verbindet die Punkte linear.
 Die Regler steuern h (0.01–0.50 s) und N (10–1000 ganze Schritte); T = N · h.
 Diese Grenzen sind in `src/simulation/comparison.ts` anpassbar. Änderungen an
-Reglern, Methode und gültigen Anfangswerten werden sofort berechnet. „Alle Verfahren“
-zeichnet alle fünf Näherungen und ihre Fehler mit konsistenten Farben. Die Checkbox
+Reglern, D, m und gültigen Anfangswerten werden sofort berechnet. Jedes Verfahren
+hat eine eigene Checkbox: Alle Kombinationen einschließlich keiner Auswahl sind
+möglich. Die Näherungen und Fehler verwenden konsistente Farben. Die Checkbox
 blendet ausschließlich die exakte Kurve aus; die Fehlerberechnung bleibt erhalten.
 Mit „exakt“ ist die analytische Lösung gemeint. Instabilität wird nicht künstlich korrigiert.
 Bei stark wachsendem Euler-Fehler kann die gemeinsame Achse die anderen Kurven
@@ -119,6 +121,11 @@ zusammendrücken; dann ein einzelnes Verfahren auswählen oder hineinzoomen.
 Das Design ist Mobile First mit dunkelgrauem Hintergrund und Primärfarbe `#69d2f5`.
 Alle Oberflächen-, Text-, Akzent- und Verfahrensfarben stehen in
 `src/styles/variables.css`. Plotly liest dieselben Variablen beim Zeichnen.
+Die Auswahl „Hell“, „Dunkel“ oder „System“ im Kopfbereich wird im Browser gespeichert.
+„System“ ist die Voreinstellung und folgt auch laufenden Änderungen des Betriebssystems.
+Der helle Modus verwendet dunklere Akzentfarben für lesbaren Kontrast. Diagramme
+wechseln ihre Farben sofort mit. Die Startseite trägt den Browsertitel „SimpleMath“;
+das gemeinsame ∂-Favicon liegt in `public/favicon.svg`.
 
 ### Ein weiteres Verfahren hinzufügen
 

@@ -1,5 +1,5 @@
-import { methodNames } from '../../simulation/oscillator';
-import { controlLimits, simulationDuration, type ComparisonParameters, type MethodSelection } from '../../simulation/comparison';
+import { methodNames, type Method } from '../../simulation/oscillator';
+import { controlLimits, simulationDuration, type ComparisonParameters } from '../../simulation/comparison';
 interface Props {
   parameters: ComparisonParameters;
   showExact: boolean;
@@ -10,13 +10,15 @@ export default function SimulationControls({ parameters, showExact, onChange, on
   const update = (change: Partial<ComparisonParameters>) => onChange({ ...parameters, ...change });
   return <fieldset className="controls">
     <legend>Parameter</legend>
-    <div className="control">
-      <label htmlFor="method">Numerisches Verfahren</label>
-      <select id="method" value={parameters.method} onChange={event => update({ method: event.target.value as MethodSelection })}>
-        {Object.entries(methodNames).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
-        <option value="all">Alle Verfahren</option>
-      </select>
-    </div>
+    <fieldset className="method-options"><legend>Verfahren vergleichen</legend>
+      {(Object.keys(methodNames) as Method[]).map(method => <label key={method} className="method-option">
+        <input type="checkbox" checked={parameters.methods.includes(method)}
+          onChange={event => update({ methods: event.target.checked
+            ? [...parameters.methods, method] : parameters.methods.filter(value => value !== method) })} />
+        <span className="method-swatch" style={{ background: `var(--method-${method})` }} aria-hidden="true" />
+        {methodNames[method]}
+      </label>)}
+    </fieldset>
     <div className="control">
       <label htmlFor="step-size">Schrittweite h <output htmlFor="step-size">{parameters.stepSize.toFixed(2)} s</output></label>
       <input id="step-size" type="range" {...controlLimits.stepSize} value={parameters.stepSize}
@@ -32,6 +34,14 @@ export default function SimulationControls({ parameters, showExact, onChange, on
       <span className="range-bounds" aria-hidden="true"><span>10 Schritte</span><span>1000 Schritte</span></span>
     </div>
     <div className="initial-values">
+      <label htmlFor="spring-constant">Federkonstante D (N/m)
+        <input id="spring-constant" type="number" min={Number.MIN_VALUE} step="any" defaultValue={parameters.springConstant}
+          onChange={event => { if (event.target.validity.valid && event.target.valueAsNumber > 0) update({ springConstant: event.target.valueAsNumber }); }} />
+      </label>
+      <label htmlFor="mass">Masse m (kg)
+        <input id="mass" type="number" min={Number.MIN_VALUE} step="any" defaultValue={parameters.mass}
+          onChange={event => { if (event.target.validity.valid && event.target.valueAsNumber > 0) update({ mass: event.target.valueAsNumber }); }} />
+      </label>
       <label htmlFor="initial-position">Anfangsposition (m)
         <input id="initial-position" type="number" min="-100" max="100" step="any" defaultValue={parameters.position}
           onChange={event => { if (event.target.value !== '' && event.target.validity.valid) update({ position: event.target.valueAsNumber }); }} />
@@ -43,6 +53,6 @@ export default function SimulationControls({ parameters, showExact, onChange, on
     </div>
     <label className="exact-toggle"><input type="checkbox" checked={showExact} onChange={event => onShowExact(event.target.checked)} />
       Exakte Lösung einblenden</label>
-    <p className="control-note">Änderungen werden sofort berechnet. Anfangswerte: −100 bis 100; leere oder ungültige Eingaben übernehmen wir erst nach Korrektur.</p>
+    <p className="control-note">Änderungen werden sofort berechnet. D und m müssen größer als 0 sein. Anfangswerte: −100 bis 100; leere oder ungültige Eingaben übernehmen wir erst nach Korrektur.</p>
   </fieldset>;
 }

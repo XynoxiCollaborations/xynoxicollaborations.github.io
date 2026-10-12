@@ -1,21 +1,26 @@
 import { methodNames, simulateOscillator, type Method, type SimulationData } from './oscillator';
+import { harmonicOscillator } from '../math/systems/harmonicOscillator';
+import { exactOscillator } from '../math/systems/exactSolutions';
+import type { Solution } from '../math/types';
 
-export type MethodSelection = Method | 'all';
 export interface ComparisonParameters {
-  method: MethodSelection;
+  methods: readonly Method[];
   stepSize: number;
   stepCount: number;
   position: number;
   velocity: number;
+  springConstant: number;
+  mass: number;
 }
 export interface MethodResult { method: Method; data: SimulationData }
-export interface ComparisonData { duration: number; results: MethodResult[] }
+export interface ComparisonData { duration: number; results: MethodResult[]; exact: Solution }
 export const controlLimits = {
   stepSize: { min: 0.01, max: 0.5, step: 0.01 },
   stepCount: { min: 10, max: 1000, step: 1 },
 } as const;
 export const defaultComparison: ComparisonParameters = {
-  method: 'all', stepSize: 0.1, stepCount: 200, position: 1, velocity: 0,
+  methods: Object.keys(methodNames) as Method[], stepSize: 0.1, stepCount: 200,
+  position: 1, velocity: 0, springConstant: 1, mass: 1,
 };
 export function simulationDuration(parameters: Pick<ComparisonParameters, 'stepSize' | 'stepCount'>): number {
   return parameters.stepSize * parameters.stepCount;
@@ -27,7 +32,17 @@ export function compareOscillator(parameters: ComparisonParameters): ComparisonD
     throw new Error('Die Schrittzahl N muss eine natürliche Zahl von 1 bis 100 000 sein.');
   }
   const duration = simulationDuration(parameters);
-  const methods = parameters.method === 'all' ? Object.keys(methodNames) as Method[] : [parameters.method];
+  const { position, velocity, springConstant, mass } = parameters;
+  harmonicOscillator(springConstant, mass);
+  if (stepSize <= 0 || ![stepSize, duration, position, velocity].every(Number.isFinite)) {
+    throw new Error('Schrittweite und Anfangswerte müssen endlich sein; h muss positiv sein.');
+  }
+  const methods = (Object.keys(methodNames) as Method[]).filter(method => parameters.methods.includes(method));
   const results = methods.map(method => ({ method, data: simulateOscillator({ ...parameters, method, stepSize, duration }) }));
-  return { duration, results };
+  // Keep the analytical reference available even when no numerical method is selected.
+  const exact = results[0]?.data.exact ?? Array.from({ length: stepCount + 1 }, (_, index) => {
+    const t = index === stepCount ? duration : index * stepSize;
+    return { t, state: exactOscillator(t, position, velocity, springConstant, mass) };
+  });
+  return { duration, results, exact };
 }

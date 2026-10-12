@@ -10,8 +10,8 @@ export function solutionTraces(data: ComparisonData, showExact: boolean): LineTr
     x: data.numerical.map(p => p.t), y: data.numerical.map(p => p.state[0]),
     type: 'scatter', mode: 'lines', name: methodNames[method], line: methodLine(method),
   }));
-  if (showExact && data.results.length) {
-    const exact = data.results[0].data.exact;
+  if (showExact) {
+    const exact = data.exact;
     traces.push({ x: exact.map(p => p.t), y: exact.map(p => p.state[0]), type: 'scatter',
       mode: 'lines', name: 'Exakte Lösung', line: { color: 'var(--exact)', dash: 'dash', width: 2 } });
   }
