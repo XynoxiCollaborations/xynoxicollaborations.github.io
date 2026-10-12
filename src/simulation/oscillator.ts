@@ -7,6 +7,7 @@ import { asFirstOrder, pack } from '../math/mechanics';
 import { harmonicOscillator } from '../math/systems/harmonicOscillator';
 import { exactOscillator } from '../math/systems/exactSolutions';
 import type { Solution } from '../math/types';
+import { oscillatorEnergy } from '../math/systems/oscillatorEnergy';
 
 export const methodNames = { euler: 'Euler', eulerCromer: 'Euler-Cromer', heun: 'Heun',
   leapfrog: 'Leapfrog', rungeKutta4: 'Runge-Kutta-4' } as const;
@@ -18,6 +19,7 @@ export interface SimulationParameters {
 export interface SimulationData {
   numerical: Solution; exact: Solution; positionError: { t: number; error: number }[];
   maxPositionError: number;
+  energy: { t: number; numerical: number; exact: number; error: number }[];
 }
 export const defaultParameters: SimulationParameters = {
   method: 'rungeKutta4', stepSize: 0.1, duration: 20, position: 1, velocity: 0, springConstant: 1, mass: 1,
@@ -39,6 +41,11 @@ export function simulateOscillator(parameters: SimulationParameters): Simulation
   const exact = numerical.map(({ t }) => ({ t, state: exactOscillator(t, position, velocity, springConstant, mass) }));
   const positionError = numerical.map(({ t, state }, index) =>
     ({ t, error: Math.abs(state[0] - exact[index].state[0]) }));
-  return { numerical, exact, positionError,
+  const exactEnergy = oscillatorEnergy(position, velocity, springConstant, mass);
+  const energy = numerical.map(({ t, state }) => {
+    const value = oscillatorEnergy(state[0], state[1], springConstant, mass);
+    return { t, numerical: value, exact: exactEnergy, error: Math.abs(value - exactEnergy) };
+  });
+  return { numerical, exact, positionError, energy,
     maxPositionError: positionError.reduce((max, point) => Math.max(max, point.error), 0) };
 }

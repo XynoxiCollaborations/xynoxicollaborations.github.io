@@ -1,7 +1,6 @@
 # Approximation von Differentialgleichungen
 
-Eine statische Website für ein schulisches Mathematikprojekt: Grundlagen lesen,
-numerische Verfahren am harmonischen Oszillator ausprobieren und später Poster
+Eine statische Website für ein schulisches Mathematikprojekt: numerische Verfahren am harmonischen Oszillator ausprobieren und später Poster
 und Skript herunterladen. Oberfläche und Dokumentation sind auf Deutsch.
 
 ## Technik und Voraussetzungen
@@ -40,7 +39,7 @@ npm run preview     # Produktionsbuild lokal ansehen
 
 ```text
 src/
-  pages/                  Startseite, theorie, simulationen
+  pages/                  Startseite, simulationen
   layouts/                gemeinsames HTML-Grundgerüst
   components/             Navigation, Downloadkarte, KaTeX-Formel
     simulations/          React-Steuerung und Diagrammkomponenten
@@ -67,15 +66,15 @@ aktiviert diese Domain nicht eigenständig; maßgeblich sind die Pages-Einstellu
 
 ## Inhalte bearbeiten
 
-Texte direkt in `src/pages/*.astro` ändern. Für weitere Formeln die Verwendung von
-`MathFormula` in `theorie.astro` kopieren. KaTeX-CSS und Schriften werden lokal
+Texte direkt in `src/pages/*.astro` ändern. Für weitere Formeln steht die Komponente
+`src/components/MathFormula.astro` bereit. KaTeX-CSS und Schriften werden lokal
 gebündelt; ungültige Formeln lassen den Build fehlschlagen. Farben, Abstände und
 Inhaltsbreite stehen in `src/styles/variables.css`.
 
 Die PDFs liegen in `public/downloads/`: `poster_print.pdf`, `poster_digital.pdf`
 und `script.pdf`. Aktuell enthalten sie zum Funktionstest nur ihren Dateinamen.
 Später durch die endgültigen Dokumente ersetzen und den Testhinweis auf der Startseite
-entfernen. Die Posterkarte zeigt Print-Version und digitale Version direkt an;
+entfernen. Die Posterkarte verlinkt ausschließlich die Print-Version; die vorhandene digitale Datei bleibt erhalten;
 das Skript erhält einen direkten Downloadlink. Die Beschriftungen sind auf Deutsch.
 Fehlende Dateien erhalten einen Hinweis ohne kaputten Link. Der Build bricht bei
 einem LFS-Zeiger anstelle eines PDFs ab, damit keine defekten Downloads veröffentlicht werden.
@@ -106,9 +105,19 @@ sollte man keine globalen Energieeigenschaften einer konstanten Schrittweite vor
 
 Die Simulation startet mit D = 1 N/m und m = 1 kg. Beide Werte sind positiv und
 frei einstellbar; t₀ = 0 und keine Reibung bleiben die Modellannahmen.
-Verglichen wird der absolute **Positionsfehler an denselben Stützstellen**, nicht
-der Fehler des vollständigen Zustands. Plotly verbindet die Punkte linear.
+Die Auswahl „Dargestellte Größe“ wechselt zwischen Position (m) und Gesamtenergie (J).
+Die Energie wird aus jedem numerischen Zustand mit E = ½Dx² + ½mv² berechnet
+(`src/math/systems/oscillatorEnergy.ts`), nicht als separate ODE integriert.
+Die exakte Referenz ist die konstante Anfangsenergie. Diagramme und Tabellen zeigen
+den absoluten Fehler der gewählten Größe an denselben Stützstellen.
+Die Solver und ihre Parameter bleiben beim Wechsel unverändert. Plotly verbindet die Punkte linear.
 Die Regler steuern h (0.01–0.50 s) und N (10–1000 ganze Schritte); T = N · h.
+Standardmäßig sind nur die Regler für h und N sichtbar. „Advanced options“
+blendet die übrigen Einstellungen ein und ersetzt die Regler durch Zahlenfelder
+für h = 0.001–5 s (Schritte von 0.001 s) und N = 10–100000 ganze Schritte.
+Beim Zurückschalten erweitern sich die Regler bei Bedarf auf die eingegebenen Werte,
+damit keine gültigen Werte verloren gehen;
+leere oder ungültige Eingaben ändern die Berechnung nicht.
 Diese Grenzen sind in `src/simulation/comparison.ts` anpassbar. Änderungen an
 Reglern, D, m und gültigen Anfangswerten werden sofort berechnet. Jedes Verfahren
 hat eine eigene Checkbox: Alle Kombinationen einschließlich keiner Auswahl sind

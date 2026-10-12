@@ -5,24 +5,26 @@ import SolutionPlot from './SolutionPlot';
 import ErrorPlot from './ErrorPlot';
 import SimulationReadout from './SimulationReadout';
 import './simulation.css';
+import type { Quantity } from '../../simulation/quantities';
 
 export default function Simulation() {
   const [parameters, setParameters] = useState(defaultComparison);
+  const [quantity, setQuantity] = useState<Quantity>('position');
   const [showExact, setShowExact] = useState(true);
   const result = useMemo(() => {
     try { return { data: compareOscillator(parameters), error: undefined }; }
     catch (error) { return { data: undefined, error: error instanceof Error ? error.message : 'Berechnung fehlgeschlagen.' }; }
   }, [parameters]);
   return <section className="simulation" aria-label="Interaktive Simulation">
-    <SimulationControls parameters={parameters} onChange={setParameters} showExact={showExact} onShowExact={setShowExact} />
+    <SimulationControls quantity={quantity} onQuantity={setQuantity} parameters={parameters} onChange={setParameters} showExact={showExact} onShowExact={setShowExact} />
     <div className="simulation-results">
       {result.error && <p role="alert">{result.error}</p>}
       {result.data && <>
         <div className="lab-heading"><span>Harmonischer Oszillator</span><span className="live-indicator">Live</span></div>
-        <SolutionPlot data={result.data} showExact={showExact} />
+        <SolutionPlot quantity={quantity} data={result.data} showExact={showExact} />
         {result.data.results.length > 0 ? <>
-          <ErrorPlot data={result.data} />
-          <SimulationReadout data={result.data} />
+          <ErrorPlot quantity={quantity} data={result.data} />
+          <SimulationReadout quantity={quantity} data={result.data} />
         </> : <p role="status">Kein numerisches Verfahren ausgewählt. Wähle mindestens eines für den Fehlervergleich.</p>}
       </>}
     </div>

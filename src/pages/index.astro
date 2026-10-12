@@ -18,11 +18,6 @@ import { sitePath } from "../lib/paths";
   </p>
   <div class="cards">
     <article class="card">
-      <h2>Theorie</h2><p>
-        Von einer Gleichung zweiter Ordnung zu einem System erster Ordnung.
-      </p><a href={sitePath("theorie/")}>Grundlagen lesen →</a>
-    </article>
-    <article class="card">
       <h2>Simulationen</h2><p>
         Fünf Verfahren mit der exakten Lösung vergleichen.
       </p><a href={sitePath("simulationen/")}>Oszillator untersuchen →</a>
@@ -36,13 +31,9 @@ import { sitePath } from "../lib/paths";
     <div class="cards">
       <DownloadCard
         title="Poster"
-        description="Das Projekt im Überblick. Als Druckversion oder für den Bildschirm."
+        description="Das Projekt im Überblick als Druckversion."
         variants={[
           { filename: "poster_print.pdf", label: "Print-Version" },
-          {
-            filename: "poster_digital.pdf",
-            label: "Digitale Version",
-          },
         ]}
       />
       <DownloadCard

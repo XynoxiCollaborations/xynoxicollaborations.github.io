@@ -1,15 +1,34 @@
+import { useState } from 'react';
+import StepControls from './StepControls';
+import { quantityLabels, type Quantity } from '../../simulation/quantities';
 import { methodNames, type Method } from '../../simulation/oscillator';
-import { controlLimits, simulationDuration, type ComparisonParameters } from '../../simulation/comparison';
+import { type ComparisonParameters } from '../../simulation/comparison';
 interface Props {
+  quantity: Quantity;
+  onQuantity: (quantity: Quantity) => void;
   parameters: ComparisonParameters;
   showExact: boolean;
   onChange: (parameters: ComparisonParameters) => void;
   onShowExact: (show: boolean) => void;
 }
-export default function SimulationControls({ parameters, showExact, onChange, onShowExact }: Props) {
+export default function SimulationControls({ parameters, showExact, onChange, onShowExact, quantity, onQuantity }: Props) {
+  const [advanced, setAdvanced] = useState(false);
   const update = (change: Partial<ComparisonParameters>) => onChange({ ...parameters, ...change });
   return <fieldset className="controls">
     <legend>Parameter</legend>
+    <StepControls parameters={parameters} advanced={advanced} onChange={update} />
+    <label className="exact-toggle">
+      <input type="checkbox" checked={advanced} aria-expanded={advanced} aria-controls="advanced-options"
+        onChange={event => setAdvanced(event.target.checked)} />
+      Advanced options
+    </label>
+    {advanced && <div id="advanced-options" className="advanced-options">
+    <div className="control">
+      <label htmlFor="quantity">Dargestellte Größe</label>
+      <select id="quantity" value={quantity} onChange={event => onQuantity(event.target.value as Quantity)}>
+        {Object.entries(quantityLabels).map(([value, label]) => <option key={value} value={value}>{label.name}</option>)}
+      </select>
+    </div>
     <fieldset className="method-options"><legend>Verfahren vergleichen</legend>
       {(Object.keys(methodNames) as Method[]).map(method => <label key={method} className="method-option">
         <input type="checkbox" checked={parameters.methods.includes(method)}
@@ -19,20 +38,6 @@ export default function SimulationControls({ parameters, showExact, onChange, on
         {methodNames[method]}
       </label>)}
     </fieldset>
-    <div className="control">
-      <label htmlFor="step-size">Schrittweite h <output htmlFor="step-size">{parameters.stepSize.toFixed(2)} s</output></label>
-      <input id="step-size" type="range" {...controlLimits.stepSize} value={parameters.stepSize}
-        aria-valuetext={`${parameters.stepSize.toFixed(2)} Sekunden`}
-        onChange={event => update({ stepSize: Number(event.target.value) })} />
-      <span className="range-bounds" aria-hidden="true"><span>0.01 s</span><span>0.50 s</span></span>
-    </div>
-    <div className="control">
-      <label htmlFor="step-count">Schritte N <output htmlFor="step-count">{parameters.stepCount} (T = {simulationDuration(parameters).toFixed(2)} s)</output></label>
-      <input id="step-count" type="range" {...controlLimits.stepCount} value={parameters.stepCount}
-        aria-valuetext={`${parameters.stepCount} Schritte, Zeitintervall ${simulationDuration(parameters).toFixed(2)} Sekunden`}
-        onChange={event => update({ stepCount: Number(event.target.value) })} />
-      <span className="range-bounds" aria-hidden="true"><span>10 Schritte</span><span>1000 Schritte</span></span>
-    </div>
     <div className="initial-values">
       <label htmlFor="spring-constant">Federkonstante D (N/m)
         <input id="spring-constant" type="number" min={Number.MIN_VALUE} step="any" defaultValue={parameters.springConstant}
@@ -54,5 +59,6 @@ export default function SimulationControls({ parameters, showExact, onChange, on
     <label className="exact-toggle"><input type="checkbox" checked={showExact} onChange={event => onShowExact(event.target.checked)} />
       Exakte Lösung einblenden</label>
     <p className="control-note">Änderungen werden sofort berechnet. D und m müssen größer als 0 sein. Anfangswerte: −100 bis 100; leere oder ungültige Eingaben übernehmen wir erst nach Korrektur.</p>
+    </div>}
   </fieldset>;
 }

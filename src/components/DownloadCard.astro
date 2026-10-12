@@ -10,7 +10,7 @@ const { title, description, variants } = Astro.props;
 const downloads = variants.map(variant => ({ ...variant, available: isPdfAvailable(variant.filename) }));
 ---
 <article class="card download-card">
-  <span class="file-type">PDF / {title === 'Poster' ? '02 VERSIONEN' : 'DOKUMENT'}</span>
+  <span class="file-type">PDF / {downloads.length > 1 ? `${downloads.length} VERSIONEN` : 'DOKUMENT'}</span>
   <h3>{title}</h3><p>{description}</p>
   <div class:list={['download-options', { 'multiple-versions': downloads.length > 1 }]}>
     {downloads.map(file => file.available

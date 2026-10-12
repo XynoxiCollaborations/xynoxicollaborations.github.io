@@ -2,6 +2,7 @@ import { methodNames, simulateOscillator, type Method, type SimulationData } fro
 import { harmonicOscillator } from '../math/systems/harmonicOscillator';
 import { exactOscillator } from '../math/systems/exactSolutions';
 import type { Solution } from '../math/types';
+import { oscillatorEnergy } from '../math/systems/oscillatorEnergy';
 
 export interface ComparisonParameters {
   methods: readonly Method[];
@@ -13,10 +14,14 @@ export interface ComparisonParameters {
   mass: number;
 }
 export interface MethodResult { method: Method; data: SimulationData }
-export interface ComparisonData { duration: number; results: MethodResult[]; exact: Solution }
+export interface ComparisonData { duration: number; results: MethodResult[]; exact: Solution; exactEnergy: number }
 export const controlLimits = {
   stepSize: { min: 0.01, max: 0.5, step: 0.01 },
   stepCount: { min: 10, max: 1000, step: 1 },
+} as const;
+export const advancedControlLimits = {
+  stepSize: { min: 0.001, max: 5, step: 0.001 },
+  stepCount: { min: 10, max: 100_000, step: 1 },
 } as const;
 export const defaultComparison: ComparisonParameters = {
   methods: Object.keys(methodNames) as Method[], stepSize: 0.1, stepCount: 200,
@@ -44,5 +49,5 @@ export function compareOscillator(parameters: ComparisonParameters): ComparisonD
     const t = index === stepCount ? duration : index * stepSize;
     return { t, state: exactOscillator(t, position, velocity, springConstant, mass) };
   });
-  return { duration, results, exact };
+  return { duration, results, exact, exactEnergy: oscillatorEnergy(position, velocity, springConstant, mass) };
 }
