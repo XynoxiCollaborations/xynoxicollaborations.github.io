@@ -91,14 +91,14 @@ Bei neuen Rechnern ist die lokale LFS-Einrichtung erneut erforderlich.
 
 ### Simulationsergebnisse herunterladen
 
-Unter jedem Diagramm erstellt „Diagramm als PNG herunterladen“ ein Bild mit
+Der Download-Pfeil unten rechts in jeder Diagrammkarte erstellt ein PNG mit
 1600 × 1000 Pixeln, Titel, Legende und beschrifteten Achsen einschließlich Einheiten.
 Exportiert wird der vollständige Zeitverlauf der aktuell ausgewählten Kurven,
 unabhängig vom Bildschirmzoom und passend zum aktuellen Farbmodus.
-„Alle Werte als CSV herunterladen“ enthält sämtliche Stützstellen der ausgewählten
+„alle Werte herunterladen“ enthält sämtliche Stützstellen der ausgewählten
 Verfahren mit Zeit, numerischer Näherung, analytischer Referenz und absolutem Fehler
-für Position oder Energie. „Fehlervergleich als CSV herunterladen“ exportiert die
-maximalen Fehler. Die CSV-Dateien verwenden UTF-8, Semikolon und Dezimalpunkt;
+für Position oder Energie. „Fehlervergleich herunterladen“ exportiert die
+maximalen Fehler. Beide Textlinks stehen unter der maximalen Fehlertabelle. Die CSV-Dateien verwenden UTF-8, Semikolon und Dezimalpunkt;
 Zahlen werden ohne zusätzliche Rundung mit der gespeicherten JavaScript-Genauigkeit
 ausgegeben. Beim Tabellenimport gegebenenfalls den Dezimalpunkt einstellen.
 

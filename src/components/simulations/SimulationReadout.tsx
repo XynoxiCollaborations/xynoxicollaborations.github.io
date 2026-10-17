@@ -7,11 +7,6 @@ import { downloadText } from '../../lib/downloadText';
 export default function SimulationReadout({ data, quantity }: { data: ComparisonData; quantity: Quantity }) {
   const label = quantityLabels[quantity];
   return <>
-    <div className="export-actions">
-      <button type="button" onClick={() => downloadText(simulationCsv(data, quantity), `simplemath-${quantity}-werte.csv`)}>Alle Werte als CSV herunterladen</button>
-      <button type="button" onClick={() => downloadText(errorSummaryCsv(data, quantity), `simplemath-${quantity}-fehler.csv`)}>Fehlervergleich als CSV herunterladen</button>
-    </div>
-    <p className="control-note">CSV: alle Stützstellen der ausgewählten Verfahren, ohne zusätzliche Rundung; Semikolon als Trennzeichen und Dezimalpunkt.</p>
     <div className="table-scroll" tabIndex={0} role="region" aria-label="Fehlervergleich">
       <table><caption>Maximaler absoluter {label.error} an den Stützstellen</caption>
         <thead><tr><th scope="col">Verfahren</th><th scope="col">Fehler ({label.unit})</th></tr></thead>
@@ -20,7 +15,13 @@ export default function SimulationReadout({ data, quantity }: { data: Comparison
         </tr>)}</tbody>
       </table>
     </div>
+    <div className="csv-downloads" aria-label="Tabellen herunterladen">
+      <button type="button" title="Alle Stützstellen als CSV, ohne zusätzliche Rundung" onClick={() => downloadText(simulationCsv(data, quantity), `simplemath-${quantity}-werte.csv`)}>alle Werte herunterladen</button>
+      <span aria-hidden="true">·</span>
+      <button type="button" title="Maximale Fehler als CSV" onClick={() => downloadText(errorSummaryCsv(data, quantity), `simplemath-${quantity}-fehler.csv`)}>Fehlervergleich herunterladen</button>
+    </div>
     <details className="result-details"><summary>Wertetabellen zu den Diagrammen</summary>
+      <p>CSV-Downloads enthalten alle Stützstellen ohne zusätzliche Rundung, mit Semikolon als Trennzeichen und Dezimalpunkt.</p>
       <p>Die ersten 50 Stützstellen je Verfahren. Die Diagramme enthalten alle berechneten Punkte.
         Die Fehler werden auch bei ausgeblendeter exakter Kurve gegen die analytische Lösung berechnet.</p>
       {data.results.map(({ method, data }) => <div className="table-scroll" key={method} tabIndex={0} role="region" aria-label={methodNames[method]}>

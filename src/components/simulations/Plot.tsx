@@ -73,12 +73,14 @@ export default function Plot({ traces, title, yLabel }: { traces: LineTrace[]; t
     <figcaption>{title}</figcaption>
     {error && <p role="alert">Das Diagramm konnte nicht geladen werden. Bitte Seite neu laden.</p>}
     <div ref={element} className="plot" role="img" aria-label={`${title}. ${yLabel} über der Zeit.`} />
-    <p className="plot-hint">Ziehen zum Zoomen · Doppelklick zum Zurücksetzen</p>
-    <div className="export-actions">
-      <button type="button" disabled={exporting} onClick={exportImage} aria-label={`${title} als PNG herunterladen`}>
-        {exporting ? 'Bild wird erstellt …' : 'Diagramm als PNG herunterladen'}
+    {exportError && <p role="alert">Bildexport fehlgeschlagen. Bitte erneut versuchen.</p>}
+    <div className="plot-footer">
+      <p className="plot-hint">Ziehen zum Zoomen · Doppelklick zum Zurücksetzen</p>
+      <button className="plot-download" type="button" disabled={exporting} onClick={exportImage}
+        aria-busy={exporting} aria-label={`${title} als PNG herunterladen`}
+        title={exporting ? 'Bild wird erstellt …' : 'Diagramm als PNG herunterladen'}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" /></svg>
       </button>
-      {exportError && <p role="alert">Bildexport fehlgeschlagen. Bitte erneut versuchen.</p>}
     </div>
   </figure>;
 }
