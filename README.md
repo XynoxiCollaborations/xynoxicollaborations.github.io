@@ -89,6 +89,19 @@ Bei neuen Rechnern ist die lokale LFS-Einrichtung erneut erforderlich.
 
 ## Mathematik und Erweiterungen
 
+### Simulationsergebnisse herunterladen
+
+Unter jedem Diagramm erstellt „Diagramm als PNG herunterladen“ ein Bild mit
+1600 × 1000 Pixeln, Titel, Legende und beschrifteten Achsen einschließlich Einheiten.
+Exportiert wird der vollständige Zeitverlauf der aktuell ausgewählten Kurven,
+unabhängig vom Bildschirmzoom und passend zum aktuellen Farbmodus.
+„Alle Werte als CSV herunterladen“ enthält sämtliche Stützstellen der ausgewählten
+Verfahren mit Zeit, numerischer Näherung, analytischer Referenz und absolutem Fehler
+für Position oder Energie. „Fehlervergleich als CSV herunterladen“ exportiert die
+maximalen Fehler. Die CSV-Dateien verwenden UTF-8, Semikolon und Dezimalpunkt;
+Zahlen werden ohne zusätzliche Rundung mit der gespeicherten JavaScript-Genauigkeit
+ausgegeben. Beim Tabellenimport gegebenenfalls den Dezimalpunkt einstellen.
+
 Allgemeine Systeme erster Ordnung implementieren `ODESystem.derivative(t, state)`.
 Euler, Heun und RK4 erhalten System, Anfangszustand und `IntegrationOptions`.
 Mechanische Systeme implementieren `MechanicalSystem.acceleration(t, position)`

@@ -25,6 +25,12 @@ Leapfrog uses kick-drift-kick with synchronized output velocities.
 Mechanical solution states contain all positions followed by all velocities.
 
 # Completion checks
+## Git rules
+- Codex must NEVER modify files or create commits on the `main` branch.
+- Before making any changes, verify the current branch and switch to `codex` if needed.
+- After every task, commit the task's changes on `codex` with a descriptive message
+  explaining what changed. Preserve unrelated user changes and do not include them.
+
 Before completing changes run:
 ```bash
 npm run check

@@ -1,10 +1,17 @@
 import { quantityLabels, quantitySeries, maximumQuantityError, type Quantity } from '../../simulation/quantities';
 import type { ComparisonData } from '../../simulation/comparison';
 import { methodNames } from '../../simulation/oscillator';
+import { simulationCsv, errorSummaryCsv } from '../../simulation/csv';
+import { downloadText } from '../../lib/downloadText';
 
 export default function SimulationReadout({ data, quantity }: { data: ComparisonData; quantity: Quantity }) {
   const label = quantityLabels[quantity];
   return <>
+    <div className="export-actions">
+      <button type="button" onClick={() => downloadText(simulationCsv(data, quantity), `simplemath-${quantity}-werte.csv`)}>Alle Werte als CSV herunterladen</button>
+      <button type="button" onClick={() => downloadText(errorSummaryCsv(data, quantity), `simplemath-${quantity}-fehler.csv`)}>Fehlervergleich als CSV herunterladen</button>
+    </div>
+    <p className="control-note">CSV: alle Stützstellen der ausgewählten Verfahren, ohne zusätzliche Rundung; Semikolon als Trennzeichen und Dezimalpunkt.</p>
     <div className="table-scroll" tabIndex={0} role="region" aria-label="Fehlervergleich">
       <table><caption>Maximaler absoluter {label.error} an den Stützstellen</caption>
         <thead><tr><th scope="col">Verfahren</th><th scope="col">Fehler ({label.unit})</th></tr></thead>

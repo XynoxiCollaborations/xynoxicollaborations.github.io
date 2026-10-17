@@ -28,6 +28,10 @@
 .plot { min-height: 420px; width: 100%; }
 .plot-hint { font-size: .7rem; margin: 0; padding: 0 1.25rem 1rem; }
 .table-scroll { overflow-x: auto; }
+.export-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-block: 1rem; }
+.plot-card .export-actions { padding-inline: 1.25rem; }
+.export-actions button { white-space: normal; }
+.export-actions button:disabled { opacity: .6; cursor: wait; }
 table { border-collapse: collapse; width: 100%; font: .8rem/1.6 var(--mono); font-variant-numeric: tabular-nums; }
 caption { text-align: left; padding-block: .75rem; color: var(--muted); }
 th, td { padding: .6rem; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }

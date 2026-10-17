@@ -1,12 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import type { LineTrace } from '../../visualization/traces';
 import { themedPlot } from '../../visualization/plotTheme';
+import { downloadPlot } from '../../visualization/downloadPlot';
 
 export default function Plot({ traces, title, yLabel }: { traces: LineTrace[]; title: string; yLabel: string }) {
   const element = useRef<HTMLDivElement>(null);
   const queue = useRef<Promise<void>>(Promise.resolve());
   const revision = useRef(0);
   const [error, setError] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState(false);
+  async function exportImage() {
+    if (!element.current || exporting) return;
+    setExporting(true);
+    setExportError(false);
+    try { await downloadPlot(element.current, traces, title, yLabel); }
+    catch { setExportError(true); }
+    finally { setExporting(false); }
+  }
   const [themeVersion, setThemeVersion] = useState(0);
 
   useEffect(() => {
@@ -63,5 +74,11 @@ export default function Plot({ traces, title, yLabel }: { traces: LineTrace[]; t
     {error && <p role="alert">Das Diagramm konnte nicht geladen werden. Bitte Seite neu laden.</p>}
     <div ref={element} className="plot" role="img" aria-label={`${title}. ${yLabel} über der Zeit.`} />
     <p className="plot-hint">Ziehen zum Zoomen · Doppelklick zum Zurücksetzen</p>
+    <div className="export-actions">
+      <button type="button" disabled={exporting} onClick={exportImage} aria-label={`${title} als PNG herunterladen`}>
+        {exporting ? 'Bild wird erstellt …' : 'Diagramm als PNG herunterladen'}
+      </button>
+      {exportError && <p role="alert">Bildexport fehlgeschlagen. Bitte erneut versuchen.</p>}
+    </div>
   </figure>;
 }
