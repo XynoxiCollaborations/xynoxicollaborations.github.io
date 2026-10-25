@@ -20,7 +20,7 @@ export default function Simulation() {
     <div className="simulation-results">
       {result.error && <p role="alert">{result.error}</p>}
       {result.data && <>
-        <div className="lab-heading"><span>Harmonischer Oszillator</span><span className="live-indicator">Live</span></div>
+        <div className="lab-heading"><span>Reibungsfreies Federpendel</span><span className="live-indicator">Live</span></div>
         <SolutionPlot quantity={quantity} data={result.data} showExact={showExact} />
         {result.data.results.length > 0 ? <>
           <ErrorPlot quantity={quantity} data={result.data} />

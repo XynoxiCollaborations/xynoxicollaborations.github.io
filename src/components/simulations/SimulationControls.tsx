@@ -20,7 +20,7 @@ export default function SimulationControls({ parameters, showExact, onChange, on
     <label className="exact-toggle">
       <input type="checkbox" checked={advanced} aria-expanded={advanced} aria-controls="advanced-options"
         onChange={event => setAdvanced(event.target.checked)} />
-      Advanced options
+      weitere Optionen
     </label>
     {advanced && <div id="advanced-options" className="advanced-options">
     <div className="control">

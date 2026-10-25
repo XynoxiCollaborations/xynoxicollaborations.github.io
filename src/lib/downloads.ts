@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-export type DownloadFilename = 'poster_print.pdf' | 'poster_digital.pdf' | 'script.pdf';
+export type DownloadFilename = 'poster.pdf' | 'script.pdf';
 /** Fail the build on an unmaterialized LFS pointer instead of publishing a broken PDF. */
 export function isPdfAvailable(filename: DownloadFilename): boolean {
   // Build modules are bundled into a temporary directory; import.meta.url would

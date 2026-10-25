@@ -71,11 +71,9 @@ Texte direkt in `src/pages/*.astro` ändern. Für weitere Formeln steht die Komp
 gebündelt; ungültige Formeln lassen den Build fehlschlagen. Farben, Abstände und
 Inhaltsbreite stehen in `src/styles/variables.css`.
 
-Die PDFs liegen in `public/downloads/`: `poster_print.pdf`, `poster_digital.pdf`
-und `script.pdf`. Aktuell enthalten sie zum Funktionstest nur ihren Dateinamen.
-Später durch die endgültigen Dokumente ersetzen und den Testhinweis auf der Startseite
-entfernen. Die Posterkarte verlinkt ausschließlich die Print-Version; die vorhandene digitale Datei bleibt erhalten;
-das Skript erhält einen direkten Downloadlink. Die Beschriftungen sind auf Deutsch.
+Die PDFs liegen in `public/downloads/`: `poster.pdf` und `script.pdf`.
+Beide Downloadkarten verlinken direkt auf diese Dateien. Zum Aktualisieren die
+jeweilige PDF ersetzen und die Website neu bauen. Die Beschriftungen sind auf Deutsch.
 Fehlende Dateien erhalten einen Hinweis ohne kaputten Link. Der Build bricht bei
 einem LFS-Zeiger anstelle eines PDFs ab, damit keine defekten Downloads veröffentlicht werden.
 
@@ -125,7 +123,7 @@ Die exakte Referenz ist die konstante Anfangsenergie. Diagramme und Tabellen zei
 den absoluten Fehler der gewählten Größe an denselben Stützstellen.
 Die Solver und ihre Parameter bleiben beim Wechsel unverändert. Plotly verbindet die Punkte linear.
 Die Regler steuern h (0.01–0.50 s) und N (10–1000 ganze Schritte); T = N · h.
-Standardmäßig sind nur die Regler für h und N sichtbar. „Advanced options“
+Standardmäßig sind nur die Regler für h und N sichtbar. „weitere Optionen“
 blendet die übrigen Einstellungen ein und ersetzt die Regler durch Zahlenfelder
 für h = 0.001–5 s (Schritte von 0.001 s) und N = 10–100000 ganze Schritte.
 Beim Zurückschalten erweitern sich die Regler bei Bedarf auf die eingegebenen Werte,
